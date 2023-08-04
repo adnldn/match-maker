@@ -50,7 +50,7 @@ class MatchMaker:
         """ Load each batch and create embeddings of names. """
         dataloader = DataLoader(names, batch_size=self.batchsize, shuffle=False)
 
-        if self.device == 'mps':
+        if self.device == torch.device('mps'):
             embeddings = [self.model.module.encode(batch, convert_to_tensor=True) for batch in dataloader]
         else:
             embeddings = [self.model.encode(batch, convert_to_tensor=True) for batch in dataloader]
