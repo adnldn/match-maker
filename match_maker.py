@@ -59,25 +59,24 @@ class MatchMaker:
     
     def pair(self, names):
         """ Create list of pairs from embeddings. """
-        emb_start = time.time()
+        # emb_start = time.time()
         embeddings = self.create_embeddings(names)
-        sim_start = time.time()
+        # sim_start = time.time()
         similarity = self.similarity(embeddings)
-        pair_start = time.time()
+        # pair_start = time.time()
 
         pairs = set()
         for i in range(len(names)):
-            idxs = torch.where(similarity[i] >= self.threshold)[0]
+            idxs = torch.where(similarity[i, i+1:] >= self.threshold)[0]
             for j in idxs:
-                if j != i:
-                    pair = tuple(sorted((names[i], names[j])))
+                    pair = tuple(sorted((names[i], names[j+i+1])))
                     pairs.add(pair)
         
-        pair_end = time.time()
+        # pair_end = time.time()
         
-        print(f"Embedding time: {(sim_start-emb_start)}")
-        print(f"Scoring time: {(pair_start-sim_start)}")
-        print(f"Pairing time: {(pair_end-pair_start)}")
+        # print(f"Embedding time: {(sim_start-emb_start)}")
+        # print(f"Scoring time: {(pair_start-sim_start)}")
+        # print(f"Pairing time: {(pair_end-pair_start)}")
 
         return pairs
     
